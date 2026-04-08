@@ -1,0 +1,19 @@
+[
+  {
+    "nome": "Camera de Ré",
+    "categoria": "seguranca",
+    "plataforma": "shopee",
+    "preco_compra": 35,
+    "preco_venda": 79,
+    "link": "SEU_LINK_AQUI",
+    "copies": [
+      "isso evita batida",
+      "olha isso no carro",
+      "ninguém te conta isso"
+    ],
+    "videos": [
+      "video1.mp4",
+      "video2.mp4"
+    ]
+  }
+]
