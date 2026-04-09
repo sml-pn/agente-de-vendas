@@ -1,25 +1,30 @@
-const links = require('../data/links.json');
 const { extrairShopee } = require('./agenteShopee');
-const { gerarLegenda } = require('./conteudo');
+const { gerarPost } = require('./conteudo');
 
-function randomItem(array) {
-  return array[Math.floor(Math.random() * array.length)];
+async function rodarAgente() {
+  console.log("🤖 Agente iniciado...");
+
+  while (true) {
+    try {
+      console.log("\n🔎 Buscando produto...\n");
+
+      const produto = await extrairShopee();
+
+      console.log("📦 Produto encontrado:\n");
+      console.log(produto);
+
+      const post = gerarPost(produto);
+
+      console.log("\n🚀 POST GERADO:\n");
+      console.log(post);
+
+    } catch (erro) {
+      console.log("❌ Erro:", erro.message);
+    }
+
+    // espera 1 hora antes de rodar de novo
+    await new Promise(resolve => setTimeout(resolve, 60 * 60 * 1000));
+  }
 }
 
-async function main() {
-  const item = randomItem(links);
-
-  console.log("🔎 Buscando produto...\n");
-
-  const produto = await extrairShopee(item.link);
-
-  console.log("📦 Produto encontrado:\n");
-  console.log(produto);
-
-  const legenda = gerarLegenda(produto);
-
-  console.log("\n🚀 POST GERADO:\n");
-  console.log(legenda);
-}
-
-main();
+rodarAgente();
