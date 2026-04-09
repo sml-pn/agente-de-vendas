@@ -1,30 +1,33 @@
-const { chromium } = require('playwright');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 async function extrairShopee(link) {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-
-  await page.goto(link, { waitUntil: 'domcontentloaded' });
-
-  // espera carregar conteúdo
-  await page.waitForTimeout(5000);
-
-  const nome = await page.title();
-
-  let preco = "Preço não encontrado";
-
   try {
-    preco = await page.locator('span').first().innerText();
-  } catch {}
+    const { data } = await axios.get(link, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    });
 
-  await browser.close();
+    const $ = cheerio.load(data);
 
-  return {
-    nome,
-    preco,
-    descricao: "Kit completo pra sua casa ou oficina!",
-    link
-  };
+    const nome = $('title').text();
+
+    return {
+      nome: nome || 'Produto Shopee',
+      preco: 'Veja no link',
+      descricao: 'Produto em alta no momento!',
+      link
+    };
+
+  } catch (error) {
+    return {
+      nome: 'Erro ao buscar produto',
+      preco: 'N/A',
+      descricao: 'Não foi possível carregar',
+      link
+    };
+  }
 }
 
 module.exports = { extrairShopee };
